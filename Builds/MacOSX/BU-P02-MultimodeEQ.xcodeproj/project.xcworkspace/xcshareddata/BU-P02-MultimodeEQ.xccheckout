@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>94BAA698-F681-4B15-BB0A-7BB10D20FAFF</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FCA078D0B1D9CF99F2E21CE302620592F060D301</key>
+		<string>https://github.com/brianuosseph/JuceAudioPluginTemplate.git</string>
+	</dict>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FCA078D0B1D9CF99F2E21CE302620592F060D301</key>
+		<string>JuceAudioPluginTemplate/</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/brianuosseph/JuceAudioPluginTemplate.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FCA078D0B1D9CF99F2E21CE302620592F060D301</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FCA078D0B1D9CF99F2E21CE302620592F060D301</string>
+			<key>IDESourceControlWCCName</key>
+			<string>JuceAudioPluginTemplate</string>
+		</dict>
+	</array>
+</dict>
+</plist>
