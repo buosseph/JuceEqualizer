@@ -19,13 +19,13 @@ class MultiFilter
 {
 public:
     MultiFilter(){};
-    MultiFilter(FilterType type, float sampleRate);
+    MultiFilter(FilterType type, float sampleRate, float defaultFreq);
     ~MultiFilter();
     
     void updateCoefficients();
     void updateSampleRate(float newSampleRate);
     float tick(float sample);
-    // void changeFilterType(FilterType type);
+     void changeFilterType(FilterType type);
     
     // Controllable Parameters
     float frequency, q, dbGain;

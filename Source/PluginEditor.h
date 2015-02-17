@@ -38,7 +38,8 @@
 */
 class PluginAudioProcessorEditor  : public AudioProcessorEditor,
                                     public Timer,
-                                    public SliderListener
+                                    public SliderListener,
+                                    public ComboBoxListener
 {
 public:
     //==============================================================================
@@ -53,6 +54,7 @@ public:
     void paint (Graphics& g);
     void resized();
     void sliderValueChanged (Slider* sliderThatWasMoved);
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged);
 
 
 
@@ -86,6 +88,9 @@ private:
     ScopedPointer<Slider> f3FreqSlider;
     ScopedPointer<Slider> f3GainDbSlider;
     ScopedPointer<Slider> f3QSlider;
+    ScopedPointer<ComboBox> f1TypeComboBox;
+    ScopedPointer<ComboBox> f2TypeComboBox;
+    ScopedPointer<ComboBox> f3TypeComboBox;
 
 
     //==============================================================================

@@ -22,6 +22,9 @@ PluginAudioProcessor::PluginAudioProcessor()
     uf3Freq = DEFAULT_U_F3_FREQ;
     uf1Q = uf2Q = uf3Q = DEFAULT_U_FILTER_Q;
     uf1GainDb = uf2GainDb = uf3GainDb = DEFAULT_U_FILTER_GAIN_DB;
+    uf1Type = DEFAULT_U_F1_TYPE;
+    uf2Type = DEFAULT_U_F2_TYPE;
+    uf3Type = DEFAULT_U_F3_TYPE;
     uOutputGainDb = DEFAULT_U_OUTPUT_GAIN_DB;
     
     af1Freq = DEFAULT_A_F1_FREQ;
@@ -29,17 +32,25 @@ PluginAudioProcessor::PluginAudioProcessor()
     af3Freq = DEFAULT_A_F3_FREQ;
     af1Q = af2Q = af3Q = DEFAULT_A_FILTER_Q;
     af1GainDb = af2GainDb = af3GainDb = DEFAULT_A_FILTER_GAIN_DB;
+    af1Type = DEFAULT_A_F1_TYPE;
+    af2Type = DEFAULT_A_F2_TYPE;
+    af3Type = DEFAULT_A_F3_TYPE;
     aOutputGain = DEFAULT_A_OUTPUT_GAIN;
-    
-    filter1 = *new MultiFilter(FilterType::LowShelf, 44100.f);
-    filter2 = *new MultiFilter(FilterType::LowShelf, 44100.f);
-    filter3 = *new MultiFilter(FilterType::LowShelf, 44100.f);
-
 }
 
 PluginAudioProcessor::~PluginAudioProcessor()
 {
 }
+
+String PluginAudioProcessor::filterTypeString(FilterType type) {
+    switch (type) {
+        case FilterType::LowShelf:      return String("LowShelf");
+        case FilterType::Peak:          return String("Peak");
+        case FilterType::HighShelf:     return String("HighShelf");
+        default:                        return String::empty;
+    }
+}
+
 
 //==============================================================================
 const String PluginAudioProcessor::getName() const
@@ -59,12 +70,15 @@ float PluginAudioProcessor::getParameter (int index)                    // Must 
         case f1FreqParam:       return uf1Freq;
         case f1GainParam:       return uf1GainDb;
         case f1QParam:          return uf1Q;
+        case f1TypeParam:       return uf1Type;
         case f2FreqParam:       return uf2Freq;
         case f2GainParam:       return uf2GainDb;
         case f2QParam:          return uf2Q;
+        case f2TypeParam:       return uf2Type;
         case f3FreqParam:       return uf3Freq;
         case f3GainParam:       return uf3GainDb;
         case f3QParam:          return uf3Q;
+        case f3TypeParam:       return uf3Type;
         default:                return 0.0f;
     }
 }
@@ -80,58 +94,73 @@ void PluginAudioProcessor::setParameter (int index, float newValue)     // newVa
         case f1FreqParam:
             uf1Freq = newValue;
             af1Freq = 20 + (uf1Freq * 19980);
-            filter1.frequency = af1Freq;
-            filter1.updateCoefficients();
+            filter1->frequency = af1Freq;
+            filter1->updateCoefficients();
             break;
         case f1QParam:
             uf1Q = newValue;
             af1Q = 0.1f + (uf1Q * 9.9f);
-            filter1.q = af1Q;
-            filter1.updateCoefficients();
+            filter1->q = af1Q;
+            filter1->updateCoefficients();
             break;
         case f1GainParam:
             uf1GainDb = newValue;
             af1GainDb = -24 + (uf1GainDb * 48);
-            filter1.dbGain = af1GainDb;
-            filter1.updateCoefficients();
+            filter1->dbGain = af1GainDb;
+            filter1->updateCoefficients();
+            break;
+        case f1TypeParam:
+            uf1Type = newValue;
+            af1Type = (FilterType) (int) (uf1Type * 3.f);
+            filter1->changeFilterType(af1Type);
             break;
 
         case f2FreqParam:
             uf2Freq = newValue;
             af2Freq = 20 + (uf2Freq * 19980);
-            filter2.frequency = af2Freq;
-            filter2.updateCoefficients();
+            filter2->frequency = af2Freq;
+            filter2->updateCoefficients();
             break;
         case f2QParam:
             uf2Q = newValue;
             af2Q = 0.1f + (uf2Q * 9.9f);
-            filter2.q = af2Q;
-            filter2.updateCoefficients();
+            filter2->q = af2Q;
+            filter2->updateCoefficients();
             break;
         case f2GainParam:
             uf2GainDb = newValue;
             af2GainDb = -24 + (uf2GainDb * 48);
-            filter2.dbGain = af2GainDb;
-            filter2.updateCoefficients();
+            filter2->dbGain = af2GainDb;
+            filter2->updateCoefficients();
             break;
-            
+        case f2TypeParam:
+            uf2Type = newValue;
+            af2Type = (FilterType) (int) (uf2Type * 3.f);
+            filter2->changeFilterType(af2Type);
+            break;
+
         case f3FreqParam:
             uf3Freq = newValue;
             af3Freq = 20 + (uf3Freq * 19980);
-            filter3.frequency = af3Freq;
-            filter3.updateCoefficients();
+            filter3->frequency = af3Freq;
+            filter3->updateCoefficients();
             break;
         case f3QParam:
             uf3Q = newValue;
             af3Q = 0.1f + (uf3Q * 9.9f);
-            filter3.q = af3Q;
-            filter3.updateCoefficients();
+            filter3->q = af3Q;
+            filter3->updateCoefficients();
             break;
         case f3GainParam:
             uf3GainDb = newValue;
             af3GainDb = -24 + (uf3GainDb * 48);
-            filter3.dbGain = af3GainDb;
-            filter3.updateCoefficients();
+            filter3->dbGain = af3GainDb;
+            filter3->updateCoefficients();
+            break;
+        case f3TypeParam:
+            uf3Type = newValue;
+            af3Type = (FilterType) (int) (uf3Type * 3.f);
+            filter3->changeFilterType(af3Type);
             break;
     }
 }
@@ -143,13 +172,26 @@ float PluginAudioProcessor::getParameterDefaultValue (int index)        // Must 
         case f1FreqParam:           return DEFAULT_U_F1_FREQ;
         case f1QParam:              return DEFAULT_U_FILTER_Q;
         case f1GainParam:           return DEFAULT_U_FILTER_GAIN_DB;
+        case f1TypeParam:           return DEFAULT_U_F1_TYPE;
         case f2FreqParam:           return DEFAULT_U_F2_FREQ;
         case f2QParam:              return DEFAULT_U_FILTER_Q;
         case f2GainParam:           return DEFAULT_U_FILTER_GAIN_DB;
+        case f2TypeParam:           return DEFAULT_U_F2_TYPE;
         case f3FreqParam:           return DEFAULT_U_F3_FREQ;
         case f3QParam:              return DEFAULT_U_FILTER_Q;
         case f3GainParam:           return DEFAULT_U_FILTER_GAIN_DB;
+        case f3TypeParam:           return DEFAULT_U_F3_TYPE;
         default:                    return 0.0f;
+    }
+}
+
+int PluginAudioProcessor::getParameterNumSteps (int index)
+{
+    switch (index) {
+        case f1TypeParam:
+        case f2TypeParam:
+        case f3TypeParam:           return (int) FilterType::TotalNumFilters;
+        default:                    return AudioProcessor::getDefaultNumParameterSteps();
     }
 }
 
@@ -160,12 +202,15 @@ const String PluginAudioProcessor::getParameterName (int index)
         case f1FreqParam:       return String("Filter1 Freq");
         case f1QParam:          return String("Filter1 Q");
         case f1GainParam:       return String("Filter1 Gain");
+        case f1TypeParam:       return String("Filter1 Type");
         case f2FreqParam:       return String("Filter2 Freq");
         case f2QParam:          return String("Filter2 Q");
         case f2GainParam:       return String("Filter2 Gain");
+        case f2TypeParam:       return String("Filter2 Type");
         case f3FreqParam:       return String("Filter3 Freq");
         case f3QParam:          return String("Filter3 Q");
         case f3GainParam:       return String("Filter3 Gain");
+        case f3TypeParam:       return String("Filter3 Type");
         default:                return String::empty;
     }
 }
@@ -177,12 +222,15 @@ const String PluginAudioProcessor::getParameterText (int index)
         case f1FreqParam:       return String(af1Freq, 0) + "Hz";
         case f1QParam:          return String(af1Q, 2);
         case f1GainParam:       return String(af1GainDb, 1) + "db";
+        case f1TypeParam:       return filterTypeString(af1Type);
         case f2FreqParam:       return String(af2Freq, 0) + "Hz";
         case f2QParam:          return String(af2Q, 2);
         case f2GainParam:       return String(af2GainDb, 1) + "db";
+        case f2TypeParam:       return filterTypeString(af2Type);
         case f3FreqParam:       return String(af3Freq, 0) + "Hz";
         case f3QParam:          return String(af3Q, 2);
         case f3GainParam:       return String(af3GainDb, 1) + "db";
+        case f3TypeParam:       return filterTypeString(af3Type);
         default:                return String(getParameter(index), 2);
     }
 }
@@ -265,9 +313,17 @@ void PluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     fs = sampleRate;
-    filter1.updateSampleRate(fs);
-    filter2.updateSampleRate(fs);
-    filter3.updateSampleRate(fs);
+    
+    if (filter1 == nullptr && filter2 == nullptr && filter3 == nullptr) {
+        filter1 = new MultiFilter(af1Type, sampleRate, af1Freq);
+        filter2 = new MultiFilter(af2Type, sampleRate, af2Freq);
+        filter3 = new MultiFilter(af3Type, sampleRate, af3Freq);
+    }
+    else {
+        filter1->updateSampleRate(fs);
+        filter2->updateSampleRate(fs);
+        filter3->updateSampleRate(fs);
+    }
 }
 
 void PluginAudioProcessor::releaseResources()
@@ -281,9 +337,9 @@ void PluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
     // If sampleRate changes and not previously detected
     if (fs != getSampleRate()) {
         fs = getSampleRate();
-        filter1.updateSampleRate(fs);
-        filter2.updateSampleRate(fs);
-        filter3.updateSampleRate(fs);
+        filter1->updateSampleRate(fs);
+        filter2->updateSampleRate(fs);
+        filter3->updateSampleRate(fs);
     }
     
     // In case we have more outputs than inputs, this code clears any output
@@ -298,8 +354,8 @@ void PluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
     for (int i = 0; i < buffer.getNumSamples(); i++) {
-        leftChannel[i]  = aOutputGain * filter3.tick(filter2.tick(filter1.tick(leftChannel[i])));
-        rightChannel[i] = aOutputGain * filter3.tick(filter2.tick(filter1.tick(rightChannel[i])));
+        leftChannel[i]  = aOutputGain * filter3->tick(filter2->tick(filter1->tick(leftChannel[i])));
+        rightChannel[i] = aOutputGain * filter3->tick(filter2->tick(filter1->tick(rightChannel[i])));
     }
 }
 

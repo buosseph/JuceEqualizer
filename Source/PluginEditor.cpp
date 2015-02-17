@@ -105,6 +105,36 @@ PluginAudioProcessorEditor::PluginAudioProcessorEditor (PluginAudioProcessor& p)
     f3QSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     f3QSlider->addListener (this);
 
+    addAndMakeVisible (f1TypeComboBox = new ComboBox ("Filter1 Type"));
+    f1TypeComboBox->setEditableText (false);
+    f1TypeComboBox->setJustificationType (Justification::centred);
+    f1TypeComboBox->setTextWhenNothingSelected (TRANS("Filter Type"));
+    f1TypeComboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    f1TypeComboBox->addItem (TRANS("Low Shelf"), 1);
+    f1TypeComboBox->addItem (TRANS("Peak"), 2);
+    f1TypeComboBox->addItem (TRANS("High Shelf"), 3);
+    f1TypeComboBox->addListener (this);
+
+    addAndMakeVisible (f2TypeComboBox = new ComboBox ("Filter2 Type"));
+    f2TypeComboBox->setEditableText (false);
+    f2TypeComboBox->setJustificationType (Justification::centred);
+    f2TypeComboBox->setTextWhenNothingSelected (TRANS("Filter Type"));
+    f2TypeComboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    f2TypeComboBox->addItem (TRANS("Low Shelf"), 1);
+    f2TypeComboBox->addItem (TRANS("Peak"), 2);
+    f2TypeComboBox->addItem (TRANS("High Shelf"), 3);
+    f2TypeComboBox->addListener (this);
+
+    addAndMakeVisible (f3TypeComboBox = new ComboBox ("Filter3 Type"));
+    f3TypeComboBox->setEditableText (false);
+    f3TypeComboBox->setJustificationType (Justification::centred);
+    f3TypeComboBox->setTextWhenNothingSelected (TRANS("Filter Type"));
+    f3TypeComboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    f3TypeComboBox->addItem (TRANS("Low Shelf"), 1);
+    f3TypeComboBox->addItem (TRANS("Peak"), 2);
+    f3TypeComboBox->addItem (TRANS("High Shelf"), 3);
+    f3TypeComboBox->addListener (this);
+
 
     //[UserPreSize]
     // Add any other settings not offered by GUI editor here, else they'll be deleted
@@ -116,9 +146,13 @@ PluginAudioProcessorEditor::PluginAudioProcessorEditor (PluginAudioProcessor& p)
     f3GainDbSlider->setTextValueSuffix("db");
     outputGainDbSlider->setTextValueSuffix("db");
 
-    f1FreqSlider->setDoubleClickReturnValue(true, 120.f);
-    f2FreqSlider->setDoubleClickReturnValue(true, 800.f);
-    f3FreqSlider->setDoubleClickReturnValue(true, 12000.f);
+    f1TypeComboBox->setSelectedId(1);
+    f2TypeComboBox->setSelectedId(2);
+    f3TypeComboBox->setSelectedId(3);
+
+    f1FreqSlider->setDoubleClickReturnValue(true, 800.f);
+    f2FreqSlider->setDoubleClickReturnValue(true, 2000.f);
+    f3FreqSlider->setDoubleClickReturnValue(true, 8000.f);
 
     f1QSlider->setDoubleClickReturnValue(true, 0.71f);
     f2QSlider->setDoubleClickReturnValue(true, 0.71f);
@@ -130,7 +164,7 @@ PluginAudioProcessorEditor::PluginAudioProcessorEditor (PluginAudioProcessor& p)
     outputGainDbSlider->setDoubleClickReturnValue(true, 0.f);
     //[/UserPreSize]
 
-    setSize (480, 200);
+    setSize (480, 232);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -160,6 +194,9 @@ PluginAudioProcessorEditor::~PluginAudioProcessorEditor()
     f3FreqSlider = nullptr;
     f3GainDbSlider = nullptr;
     f3QSlider = nullptr;
+    f1TypeComboBox = nullptr;
+    f2TypeComboBox = nullptr;
+    f3TypeComboBox = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -184,19 +221,22 @@ void PluginAudioProcessorEditor::resized()
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
 
-    f1Group->setBounds (0, 0, 160, 160);
-    f1FreqSlider->setBounds (8, 16, 142, 40);
-    f1GainDbSlider->setBounds (8, 64, 144, 40);
-    f1QSlider->setBounds (8, 112, 144, 40);
-    outputGainDbSlider->setBounds (240 - (448 / 2), 160, 448, 32);
-    f2Group->setBounds (160, 0, 160, 160);
-    f2FreqSlider->setBounds (168, 16, 142, 40);
-    f2GainDbSlider->setBounds (168, 64, 144, 40);
-    f2QSlider->setBounds (168, 112, 144, 40);
-    f3Group->setBounds (320, 0, 160, 160);
-    f3FreqSlider->setBounds (328, 16, 144, 40);
-    f3GainDbSlider->setBounds (328, 64, 144, 40);
-    f3QSlider->setBounds (328, 112, 144, 40);
+    f1Group->setBounds (0, 0, 160, 200);
+    f1FreqSlider->setBounds (8, 56, 142, 40);
+    f1GainDbSlider->setBounds (8, 104, 144, 40);
+    f1QSlider->setBounds (8, 152, 144, 40);
+    outputGainDbSlider->setBounds (240 - (448 / 2), 200, 448, 32);
+    f2Group->setBounds (160, 0, 160, 200);
+    f2FreqSlider->setBounds (168, 64, 142, 40);
+    f2GainDbSlider->setBounds (168, 104, 144, 40);
+    f2QSlider->setBounds (168, 152, 144, 40);
+    f3Group->setBounds (320, 0, 160, 200);
+    f3FreqSlider->setBounds (328, 64, 144, 40);
+    f3GainDbSlider->setBounds (328, 104, 144, 40);
+    f3QSlider->setBounds (328, 152, 144, 40);
+    f1TypeComboBox->setBounds (16, 24, 128, 24);
+    f2TypeComboBox->setBounds (176, 24, 128, 24);
+    f3TypeComboBox->setBounds (336, 24, 128, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -301,6 +341,43 @@ void PluginAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
+void PluginAudioProcessorEditor::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+{
+    //[UsercomboBoxChanged_Pre]
+    //[/UsercomboBoxChanged_Pre]
+
+    if (comboBoxThatHasChanged == f1TypeComboBox)
+    {
+        //[UserComboBoxCode_f1TypeComboBox] -- add your combo box handling code here..
+        processor.setParameterNotifyingHost(
+            PluginAudioProcessor::Parameters::f1TypeParam,
+            (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
+        );
+        //[/UserComboBoxCode_f1TypeComboBox]
+    }
+    else if (comboBoxThatHasChanged == f2TypeComboBox)
+    {
+        //[UserComboBoxCode_f2TypeComboBox] -- add your combo box handling code here..
+        processor.setParameterNotifyingHost(
+            PluginAudioProcessor::Parameters::f2TypeParam,
+            (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
+        );
+        //[/UserComboBoxCode_f2TypeComboBox]
+    }
+    else if (comboBoxThatHasChanged == f3TypeComboBox)
+    {
+        //[UserComboBoxCode_f3TypeComboBox] -- add your combo box handling code here..
+        processor.setParameterNotifyingHost(
+            PluginAudioProcessor::Parameters::f3TypeParam,
+            (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
+        );
+        //[/UserComboBoxCode_f3TypeComboBox]
+    }
+
+    //[UsercomboBoxChanged_Post]
+    //[/UsercomboBoxChanged_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
@@ -321,6 +398,10 @@ void PluginAudioProcessorEditor::timerCallback() {
         -24 + (ourProcessor.uf1GainDb * 48),
         dontSendNotification
     );
+    f1TypeComboBox->setSelectedItemIndex(
+        (int) (ourProcessor.uf1Type * (float) f1TypeComboBox->getNumItems()),
+        dontSendNotification
+    );
 
     f2FreqSlider->setValue(
         20 + (ourProcessor.uf2Freq * 19980),
@@ -334,7 +415,11 @@ void PluginAudioProcessorEditor::timerCallback() {
         -24 + (ourProcessor.uf2GainDb * 48),
         dontSendNotification
     );
-
+    f2TypeComboBox->setSelectedItemIndex(
+        (int) (ourProcessor.uf2Type * (float) f2TypeComboBox->getNumItems()),
+        dontSendNotification
+    );
+    
     f3FreqSlider->setValue(
         20 + (ourProcessor.uf3Freq * 19980),
         dontSendNotification
@@ -347,7 +432,11 @@ void PluginAudioProcessorEditor::timerCallback() {
         -24 + (ourProcessor.uf3GainDb * 48),
         dontSendNotification
     );
-
+    f3TypeComboBox->setSelectedItemIndex(
+        (int) (ourProcessor.uf3Type * (float) f3TypeComboBox->getNumItems()),
+        dontSendNotification
+    );
+    
     outputGainDbSlider->setValue(
          -24 + (ourProcessor.uOutputGainDb * 48),
         dontSendNotification
@@ -369,64 +458,76 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor, public Timer"
                  constructorParams="PluginAudioProcessor&amp; p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="480" initialHeight="200">
+                 fixedSize="0" initialWidth="480" initialHeight="232">
   <BACKGROUND backgroundColour="ff222222"/>
   <GROUPCOMPONENT name="Filter1 Group" id="3e3623464cd19898" memberName="f1Group"
-                  virtualName="" explicitFocusOrder="0" pos="0 0 160 160" outlinecol="ffbbbbbb"
+                  virtualName="" explicitFocusOrder="0" pos="0 0 160 200" outlinecol="ffbbbbbb"
                   textcol="ffffffff" title="Filter1"/>
   <SLIDER name="Filter1 Frequency" id="9c1b5f965c3496b1" memberName="f1FreqSlider"
-          virtualName="" explicitFocusOrder="0" pos="8 16 142 40" min="20"
+          virtualName="" explicitFocusOrder="0" pos="8 56 142 40" min="20"
           max="20000" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter1 Gain" id="ca46285293b766fb" memberName="f1GainDbSlider"
-          virtualName="" explicitFocusOrder="0" pos="8 64 144 40" min="-24"
+          virtualName="" explicitFocusOrder="0" pos="8 104 144 40" min="-24"
           max="24" int="0.10000000000000000555" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter1 Q" id="6b3feafb481c407c" memberName="f1QSlider"
-          virtualName="" explicitFocusOrder="0" pos="8 112 144 40" min="0.10000000000000000555"
+          virtualName="" explicitFocusOrder="0" pos="8 152 144 40" min="0.10000000000000000555"
           max="10" int="0.010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Output Gain" id="c1a935f737dd219f" memberName="outputGainDbSlider"
-          virtualName="" explicitFocusOrder="0" pos="240c 160 448 32" min="-24"
+          virtualName="" explicitFocusOrder="0" pos="240c 200 448 32" min="-24"
           max="24" int="0.10000000000000000555" style="LinearHorizontal"
           textBoxPos="TextBoxRight" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <GROUPCOMPONENT name="Filter2 Group" id="7cd375bda4a5ec1a" memberName="f2Group"
-                  virtualName="" explicitFocusOrder="0" pos="160 0 160 160" outlinecol="ffbbbbbb"
+                  virtualName="" explicitFocusOrder="0" pos="160 0 160 200" outlinecol="ffbbbbbb"
                   textcol="ffffffff" title="Filter2"/>
   <SLIDER name="Filter2 Frequency" id="1c2a04d934cb6c9c" memberName="f2FreqSlider"
-          virtualName="" explicitFocusOrder="0" pos="168 16 142 40" min="20"
+          virtualName="" explicitFocusOrder="0" pos="168 64 142 40" min="20"
           max="20000" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter2 Gain" id="b8f88db88714ea6b" memberName="f2GainDbSlider"
-          virtualName="" explicitFocusOrder="0" pos="168 64 144 40" min="-24"
+          virtualName="" explicitFocusOrder="0" pos="168 104 144 40" min="-24"
           max="24" int="0.10000000000000000555" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter2 Q" id="51264063d9828a77" memberName="f2QSlider"
-          virtualName="" explicitFocusOrder="0" pos="168 112 144 40" min="0.10000000000000000555"
+          virtualName="" explicitFocusOrder="0" pos="168 152 144 40" min="0.10000000000000000555"
           max="10" int="0.010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <GROUPCOMPONENT name="Filter3 Group" id="ef8795c31b8e473f" memberName="f3Group"
-                  virtualName="" explicitFocusOrder="0" pos="320 0 160 160" outlinecol="ffbbbbbb"
+                  virtualName="" explicitFocusOrder="0" pos="320 0 160 200" outlinecol="ffbbbbbb"
                   textcol="ffffffff" title="Filter3"/>
   <SLIDER name="Filter3 Frequency" id="833854691aa41e24" memberName="f3FreqSlider"
-          virtualName="" explicitFocusOrder="0" pos="328 16 144 40" min="20"
+          virtualName="" explicitFocusOrder="0" pos="328 64 144 40" min="20"
           max="20000" int="0" style="LinearHorizontal" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter3 Gain" id="709ddea6d5c7b347" memberName="f3GainDbSlider"
-          virtualName="" explicitFocusOrder="0" pos="328 64 144 40" min="-24"
+          virtualName="" explicitFocusOrder="0" pos="328 104 144 40" min="-24"
           max="24" int="0.10000000000000000555" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <SLIDER name="Filter3 Q" id="70ef231f74f55ac0" memberName="f3QSlider"
-          virtualName="" explicitFocusOrder="0" pos="328 112 144 40" min="0.10000000000000000555"
+          virtualName="" explicitFocusOrder="0" pos="328 152 144 40" min="0.10000000000000000555"
           max="10" int="0.010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
+  <COMBOBOX name="Filter1 Type" id="adb4886bc59b10c3" memberName="f1TypeComboBox"
+            virtualName="" explicitFocusOrder="0" pos="16 24 128 24" editable="0"
+            layout="36" items="Low Shelf&#10;Peak&#10;High Shelf" textWhenNonSelected="Filter Type"
+            textWhenNoItems="(no choices)"/>
+  <COMBOBOX name="Filter2 Type" id="7fb9885b1b601bb1" memberName="f2TypeComboBox"
+            virtualName="" explicitFocusOrder="0" pos="176 24 128 24" editable="0"
+            layout="36" items="Low Shelf&#10;Peak&#10;High Shelf" textWhenNonSelected="Filter Type"
+            textWhenNoItems="(no choices)"/>
+  <COMBOBOX name="Filter3 Type" id="2396ee60b755337b" memberName="f3TypeComboBox"
+            virtualName="" explicitFocusOrder="0" pos="336 24 128 24" editable="0"
+            layout="36" items="Low Shelf&#10;Peak&#10;High Shelf" textWhenNonSelected="Filter Type"
+            textWhenNoItems="(no choices)"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

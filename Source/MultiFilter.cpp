@@ -10,10 +10,10 @@
 
 #include "MultiFilter.h"
 
-MultiFilter::MultiFilter(FilterType type, float sampleRate) {
+MultiFilter::MultiFilter(FilterType type, float sampleRate, float defaultFreq) {
     updateSampleRate(sampleRate);
     fType = type;
-    frequency = 2000.f;     // inital frequency should change based on FilterType
+    frequency = defaultFreq;
     dbGain = 0.f;
     q = 0.71f;
     filter = *new stk::BiQuad();
@@ -104,4 +104,9 @@ void MultiFilter::updateSampleRate(float newSampleRate) {
 
 float MultiFilter::tick(float sample) {
     return filter.tick(sample);
+}
+
+void MultiFilter::changeFilterType(FilterType type) {
+    fType = type;
+    updateCoefficients();
 }

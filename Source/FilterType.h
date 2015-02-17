@@ -13,7 +13,8 @@ enum class FilterType
 {
     LowShelf,
     Peak,
-    HighShelf
+    HighShelf,
+    TotalNumFilters
 };
 
 #endif

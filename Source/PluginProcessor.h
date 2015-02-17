@@ -44,7 +44,8 @@ public:
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
     float getParameterDefaultValue (int index) override; // Not included in default Juce template
-
+    int getParameterNumSteps(int index) override;        // Not included in default Juce template
+    
     const String getParameterName (int index) override;
     const String getParameterText (int index) override;
 
@@ -74,12 +75,15 @@ public:
         f1FreqParam,
         f1GainParam,
         f1QParam,
+        f1TypeParam,
         f2FreqParam,
         f2GainParam,
         f2QParam,
+        f2TypeParam,
         f3FreqParam,
         f3GainParam,
         f3QParam,
+        f3TypeParam,
         outputGainParam,
         totalNumParams
     };
@@ -88,6 +92,7 @@ public:
     float uf1Freq,      uf2Freq,        uf3Freq;
     float uf1Q,         uf2Q,           uf3Q;
     float uf1GainDb,    uf2GainDb,      uf3GainDb;
+    float uf1Type,      uf2Type,        uf3Type;
     float uOutputGainDb;
     
 private:
@@ -95,12 +100,16 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginAudioProcessor)
     
     // Default Algorithm Values
-    const float DEFAULT_A_F1_FREQ = 120.f;
-    const float DEFAULT_A_F2_FREQ = 800.f;
-    const float DEFAULT_A_F3_FREQ = 12000.f;
+    const float DEFAULT_A_F1_FREQ = 800.f;
+    const float DEFAULT_A_F2_FREQ = 2000.f;
+    const float DEFAULT_A_F3_FREQ = 8000.f;
     const float DEFAULT_A_FILTER_Q = 0.71f;
     const float DEFAULT_A_FILTER_GAIN_DB = 0.f;
     const float DEFAULT_A_OUTPUT_GAIN = 1.f;
+    const FilterType DEFAULT_A_F1_TYPE = FilterType::LowShelf;
+    const FilterType DEFAULT_A_F2_TYPE = FilterType::Peak;
+    const FilterType DEFAULT_A_F3_TYPE = FilterType::HighShelf;
+
     
     // Default Host/Control Values (Must be 0-1.f mapping)
     const float DEFAULT_U_F1_FREQ           = (DEFAULT_A_F1_FREQ - 20) / 19980;
@@ -108,6 +117,9 @@ private:
     const float DEFAULT_U_F3_FREQ           = (DEFAULT_A_F3_FREQ - 20) / 19980;
     const float DEFAULT_U_FILTER_Q          = (DEFAULT_A_FILTER_Q - 0.1f) / 9.9f;
     const float DEFAULT_U_FILTER_GAIN_DB    = 0.5f;
+    const float DEFAULT_U_F1_TYPE           = (float) (int) DEFAULT_A_F1_TYPE / (float) (int) FilterType::TotalNumFilters;
+    const float DEFAULT_U_F2_TYPE           = (float) (int) DEFAULT_A_F2_TYPE / (float) (int) FilterType::TotalNumFilters;
+    const float DEFAULT_U_F3_TYPE           = (float) (int) DEFAULT_A_F3_TYPE / (float) (int) FilterType::TotalNumFilters;
     const float DEFAULT_U_OUTPUT_GAIN_DB    = 0.5f;
     
     // Algorithm Values
@@ -115,10 +127,13 @@ private:
     float af1Freq,      af2Freq,        af3Freq;
     float af1Q,         af2Q,           af3Q;
     float af1GainDb,    af2GainDb,      af3GainDb;
+    FilterType af1Type, af2Type,        af3Type;
     float aOutputGain;
     
     // Filters
-    MultiFilter filter1, filter2, filter3;
+    ScopedPointer<MultiFilter> filter1, filter2, filter3;
+    
+    String filterTypeString(FilterType type);
 };
 
 
