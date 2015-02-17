@@ -35,12 +35,9 @@ private:
     FilterType fType;
     stk::BiQuad filter;
     
+    float K, V, D;
     float A, w0, alpha, cos_w0, sin_w0;
-    float tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-    float inter1, inter2, inter3, inter4, inter5, inter6;
-    
-    // coefficients
-    float b0, b1, b2, a1, a2;
+    float b0, b1, b2, a0, a1, a2;
 };
 
 #endif  // MULTIFILTER_H_INCLUDED

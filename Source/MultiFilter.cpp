@@ -33,16 +33,19 @@ void MultiFilter::updateCoefficients() {
             alpha = sinf(w0)/(2.f * q);
             cos_w0 = cosf(w0);
             
-            tmp1 =      A * ( (A+1.f) - (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha );
-            tmp2 =  2.f*A * ( (A-1.f) - (A+1.f)*cos_w0                      );
-            tmp3 =      A * ( (A+1.f) - (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha );
+            b0 =      A * ( (A+1.f) - (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha );
+            b1 =  2.f*A * ( (A-1.f) - (A+1.f)*cos_w0                      );
+            b2 =      A * ( (A+1.f) - (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha );
             
-            tmp4 =            (A+1.f) + (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha;
-            tmp5 =  -2.f  * ( (A-1.f) + (A+1.f)*cos_w0                      );
-            tmp6 =            (A+1.f) + (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha;
+            a0 =            (A+1.f) + (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha;
+            a1 =  -2.f  * ( (A-1.f) + (A+1.f)*cos_w0                      );
+            a2 =            (A+1.f) + (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha;
             
-            b0 = tmp1/tmp4; b1 = tmp2/tmp4; b2 = tmp3/tmp4;
-            a1 = tmp5/tmp4; a2 = tmp6/tmp4;
+            b0 /= a0;
+            b1 /= a0;
+            b2 /= a0;
+            a1 /= a0;
+            a2 /= a0;
             
             filter.setCoefficients(b0, b1, b2, a1, a2);
             break;
@@ -56,40 +59,74 @@ void MultiFilter::updateCoefficients() {
             alpha = sinf(w0)/(2.f * q);
             cos_w0 = cosf(w0);
             
-            tmp1 =      A * ( (A+1.f) + (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha );
-            tmp2 = -2.f*A * ( (A-1.f) + (A+1.f)*cos_w0                      );
-            tmp3 =      A * ( (A+1.f) + (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha );
+            b0 =      A * ( (A+1.f) + (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha );
+            b1 = -2.f*A * ( (A-1.f) + (A+1.f)*cos_w0                      );
+            b2 =      A * ( (A+1.f) + (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha );
             
-            tmp4 =            (A+1.f) - (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha;
-            tmp5 =    2.f * ( (A-1.f) - (A+1.f)*cos_w0                      );
-            tmp6 =            (A+1.f) - (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha;
+            a0 =            (A+1.f) - (A-1.f)*cos_w0 + 2.f*sqrtf(A)*alpha;
+            a1 =    2.f * ( (A-1.f) - (A+1.f)*cos_w0                      );
+            a2 =            (A+1.f) - (A-1.f)*cos_w0 - 2.f*sqrtf(A)*alpha;
             
-            b0 = tmp1/tmp4; b1 = tmp2/tmp4; b2 = tmp3/tmp4;
-            a1 = tmp5/tmp4; a2 = tmp6/tmp4;
+            b0 /= a0;
+            b1 /= a0;
+            b2 /= a0;
+            a1 /= a0;
+            a2 /= a0;
             
             filter.setCoefficients(b0, b1, b2, a1, a2);
             break;
         
         case FilterType::Peak:
-            // Peaking Filter
-            // Frequecy is skewed in this equation!!! (Peak isn't provided freq)
-            A = powf(10.f, dbGain/40.f);
+            // Zolzer's Implementation
+            // Center frequency still skewed!
             w0 = 2.f * M_PI * frequency / fs;
-            alpha = sinf(w0)/(2.f * q);
-            cos_w0 = cosf(w0);
-            
-            tmp1 =  1.f + alpha * A;
-            tmp2 =  -2.f * cos_w0;
-            tmp3 =  1.f - alpha * A;
-            
-            tmp4 =  1.f + alpha / A;
-            tmp5 =  tmp2;
-            tmp6 =  1.f - alpha / A;
-            
-            b0 = tmp1/tmp4; b1 = tmp2/tmp4; b2 = tmp3/tmp4;
-            a1 = tmp5/tmp4; a2 = tmp6/tmp4;
-            
+            K = tanf(w0/2.f);
+            if (dbGain >= 0) {
+                V = powf(10.f, dbGain/20);
+                D = 1.f + K/q + K*K;
+                
+                b0 = 1.f + V*K/q + K*K;
+                b1 = 2.f * (K*K - 1.f);
+                b2 = 1.f - V*K/q + K*K;
+                a1 = b1;
+                a2 = 1.f - K/q + K*K;
+            }
+            else {
+                V = powf(10.f, -dbGain/20);
+                D = 1.f + V*K/q + K*K;
+                
+                b0 = 1.f + K/q + K*K;
+                b1 = 2.f * (K*K - 1);
+                b2 = 1.f - K/q + K*K;
+                a1 = b1;
+                a2 = 1.f - V*K/q + K*K;
+            }
+            b0 /= D;
+            b1 /= D;
+            b2 /= D;
+            a1 /= D;
+            a2 /= D;
             filter.setCoefficients(b0, b1, b2, a1, a2);
+            
+//            // Peaking Filter
+//            // Frequecy is skewed in this equation!!! (Peak isn't provided freq)
+//            A = powf(10.f, dbGain/40.f);
+//            w0 = 2.f * M_PI * frequency / fs;
+//            alpha = sinf(w0)/(2.f * q);
+//            cos_w0 = cosf(w0);
+//            
+//            tmp1 =  1.f + alpha * A;
+//            tmp2 =  -2.f * cos_w0;
+//            tmp3 =  1.f - alpha * A;
+//            
+//            tmp4 =  1.f + alpha / A;
+//            tmp5 =  tmp2;
+//            tmp6 =  1.f - alpha / A;
+//            
+//            b0 = tmp1/tmp4; b1 = tmp2/tmp4; b2 = tmp3/tmp4;
+//            a1 = tmp5/tmp4; a2 = tmp6/tmp4;
+//            
+//            filter.setCoefficients(b0, b1, b2, a1, a2);
             break;
             
         default:
