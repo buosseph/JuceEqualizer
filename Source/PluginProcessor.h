@@ -13,6 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "BiQuad.h"
+#include "FilterType.h"
+#include "MultiFilter.h"
 
 
 //==============================================================================
@@ -116,23 +118,7 @@ private:
     float aOutputGain;
     
     // Filters
-    stk::BiQuad filter1, filter2, filter3;
-    float tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;   // intermediate values
-    
-    // Filter1 Coefficients
-    float af1A, af1w0, af1Alpha;
-    float f1b0, f1b1, f1b2, f1a1, f1a2;
-    void calculateFilter1Coefficients();
-
-    // Filter2 Coefficients
-    float af2A, af2w0, af2Alpha;
-    float f2b0, f2b1, f2b2, f2a1, f2a2;
-    void calculateFilter2Coefficients();
-
-    // Filter3 Coefficients
-    float af3A, af3w0, af3Alpha;
-    float f3b0, f3b1, f3b2, f3a1, f3a2;
-    void calculateFilter3Coefficients();
+    MultiFilter filter1, filter2, filter3;
 };
 
 

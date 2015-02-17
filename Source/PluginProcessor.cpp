@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "FilterType.h"
 #include <math.h>
 
 
@@ -30,9 +31,10 @@ PluginAudioProcessor::PluginAudioProcessor()
     af1GainDb = af2GainDb = af3GainDb = DEFAULT_A_FILTER_GAIN_DB;
     aOutputGain = DEFAULT_A_OUTPUT_GAIN;
     
-    filter1     = *new stk::BiQuad();
-    filter2     = *new stk::BiQuad();
-    filter3     = *new stk::BiQuad();
+    filter1 = *new MultiFilter(FilterType::LowShelf, 44100.f);
+    filter2 = *new MultiFilter(FilterType::LowShelf, 44100.f);
+    filter3 = *new MultiFilter(FilterType::LowShelf, 44100.f);
+
 }
 
 PluginAudioProcessor::~PluginAudioProcessor()
@@ -78,49 +80,58 @@ void PluginAudioProcessor::setParameter (int index, float newValue)     // newVa
         case f1FreqParam:
             uf1Freq = newValue;
             af1Freq = 20 + (uf1Freq * 19980);
-            calculateFilter1Coefficients();
+            filter1.frequency = af1Freq;
+            filter1.updateCoefficients();
             break;
         case f1QParam:
             uf1Q = newValue;
             af1Q = 0.1f + (uf1Q * 9.9f);
-            calculateFilter1Coefficients();
+            filter1.q = af1Q;
+            filter1.updateCoefficients();
             break;
         case f1GainParam:
             uf1GainDb = newValue;
             af1GainDb = -24 + (uf1GainDb * 48);
-            calculateFilter1Coefficients();
+            filter1.dbGain = af1GainDb;
+            filter1.updateCoefficients();
             break;
 
         case f2FreqParam:
             uf2Freq = newValue;
             af2Freq = 20 + (uf2Freq * 19980);
-            calculateFilter2Coefficients();
+            filter2.frequency = af2Freq;
+            filter2.updateCoefficients();
             break;
         case f2QParam:
             uf2Q = newValue;
             af2Q = 0.1f + (uf2Q * 9.9f);
-            calculateFilter2Coefficients();
+            filter2.q = af2Q;
+            filter2.updateCoefficients();
             break;
         case f2GainParam:
             uf2GainDb = newValue;
             af2GainDb = -24 + (uf2GainDb * 48);
-            calculateFilter2Coefficients();
+            filter2.dbGain = af2GainDb;
+            filter2.updateCoefficients();
             break;
             
         case f3FreqParam:
             uf3Freq = newValue;
             af3Freq = 20 + (uf3Freq * 19980);
-            calculateFilter3Coefficients();
+            filter3.frequency = af3Freq;
+            filter3.updateCoefficients();
             break;
         case f3QParam:
             uf3Q = newValue;
             af3Q = 0.1f + (uf3Q * 9.9f);
-            calculateFilter3Coefficients();
+            filter3.q = af3Q;
+            filter3.updateCoefficients();
             break;
         case f3GainParam:
             uf3GainDb = newValue;
             af3GainDb = -24 + (uf3GainDb * 48);
-            calculateFilter3Coefficients();
+            filter3.dbGain = af3GainDb;
+            filter3.updateCoefficients();
             break;
     }
 }
@@ -254,9 +265,9 @@ void PluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     fs = sampleRate;
-    calculateFilter1Coefficients();
-    calculateFilter2Coefficients();
-    calculateFilter3Coefficients();
+    filter1.updateSampleRate(fs);
+    filter2.updateSampleRate(fs);
+    filter3.updateSampleRate(fs);
 }
 
 void PluginAudioProcessor::releaseResources()
@@ -270,9 +281,9 @@ void PluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
     // If sampleRate changes and not previously detected
     if (fs != getSampleRate()) {
         fs = getSampleRate();
-        calculateFilter1Coefficients();
-        calculateFilter2Coefficients();
-        calculateFilter3Coefficients();
+        filter1.updateSampleRate(fs);
+        filter2.updateSampleRate(fs);
+        filter3.updateSampleRate(fs);
     }
     
     // In case we have more outputs than inputs, this code clears any output
@@ -322,73 +333,5 @@ void PluginAudioProcessor::setStateInformation (const void* data, int sizeInByte
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PluginAudioProcessor();
-}
-
-void PluginAudioProcessor::calculateFilter1Coefficients(/*filter_type_enum*/)
-{
-    // Low Shelf Filter
-    // Frequency occurs left of slope
-    // Isn't balanced when attenuating...
-    af1A = powf(10.f, af1GainDb/40.f);
-    af1w0 = 2.f * M_PI * af1Freq / fs;
-    af1Alpha = sinf(af1w0)/(2.f * af1Q);
-    
-    tmp1 =      af1A * ( (af1A+1.f) - (af1A-1.f)*cosf(af1w0) + 2.f*sqrtf(af1A)*af1Alpha );
-    tmp2 =  2.f*af1A * ( (af1A-1.f) - (af1A+1.f)*cosf(af1w0)                            );
-    tmp3 =      af1A * ( (af1A+1.f) - (af1A-1.f)*cosf(af1w0) - 2.f*sqrtf(af1A)*af1Alpha );
-    
-    tmp4 =               (af1A+1.f) + (af1A-1.f)*cosf(af1w0) + 2.f*sqrtf(af1A)*af1Alpha;
-    tmp5 =      -2.f * ( (af1A-1.f) + (af1A+1.f)*cosf(af1w0)                            );
-    tmp6 =               (af1A+1.f) + (af1A-1.f)*cosf(af1w0) - 2.f*sqrtf(af1A)*af1Alpha;
-    
-    f1b0 = tmp1/tmp4; f1b1 = tmp2/tmp4; f1b2 = tmp3/tmp4;
-    f1a1 = tmp5/tmp4; f1a2 = tmp6/tmp4;
-    
-    filter1.setCoefficients(f1b0, f1b1, f1b2, f1a1, f1a2);
-}
-
-void PluginAudioProcessor::calculateFilter2Coefficients(/*filter_type_enum*/)
-{
-    // Peaking Filter
-    // Frequecy is skewed in this equation!!! (Peak isn't provided freq)
-    af2A = powf(10.f, af2GainDb/40.f);
-    af2w0 = 2.f * M_PI * af2Freq / fs;
-    af2Alpha = sinf(af2w0)/(2.f * af2Q);
-    
-    tmp1 =  1.f + af2Alpha * af2A;
-    tmp2 =  -2.f * cosf(af2w0);
-    tmp3 =  1.f - af2Alpha * af2A;
-    
-    tmp4 =  1.f + af2Alpha / af2A;
-    tmp5 =  tmp2;
-    tmp6 =  1.f - af2Alpha / af2A;
-    
-    f2b0 = tmp1/tmp4; f2b1 = tmp2/tmp4; f2b2 = tmp3/tmp4;
-    f2a1 = tmp5/tmp4; f2a2 = tmp6/tmp4;
-    
-    filter2.setCoefficients(f2b0, f2b1, f2b2, f2a1, f2a2);
-}
-
-void PluginAudioProcessor::calculateFilter3Coefficients(/*filter_type_enum*/)
-{
-    // High Shelf Filter
-    // Frequency occurs left of slope
-    // Isn't balanced when amplifying...
-    af3A = powf(10.f, af3GainDb/40.f);
-    af3w0 = 2.f * M_PI * af3Freq / fs;
-    af3Alpha = sinf(af3w0)/(2.f * af3Q);
-    
-    tmp1 =      af3A * ( (af3A+1.f) + (af3A-1.f)*cosf(af3w0) + 2.f*sqrtf(af3A)*af3Alpha );
-    tmp2 = -2.f*af3A * ( (af3A-1.f) + (af3A+1.f)*cosf(af3w0)                            );
-    tmp3 =      af3A * ( (af3A+1.f) + (af3A-1.f)*cosf(af3w0) - 2.f*sqrtf(af3A)*af3Alpha );
-    
-    tmp4 =               (af3A+1.f) - (af3A-1.f)*cosf(af3w0) + 2.f*sqrtf(af3A)*af3Alpha;
-    tmp5 =       2.f * ( (af3A-1.f) - (af3A+1.f)*cosf(af3w0)                            );
-    tmp6 =               (af3A+1.f) - (af3A-1.f)*cosf(af3w0) - 2.f*sqrtf(af3A)*af3Alpha;
-    
-    f3b0 = tmp1/tmp4; f3b1 = tmp2/tmp4; f3b2 = tmp3/tmp4;
-    f3a1 = tmp5/tmp4; f3a2 = tmp6/tmp4;
-    
-    filter3.setCoefficients(f3b0, f3b1, f3b2, f3a1, f3a2);
 }
 

@@ -11,7 +11,45 @@
               aaxIdentifier="com.yourcompany.BUP02MultimodeEQ" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
               jucerVersion="3.1.0" companyName="brianuosseph">
   <MAINGROUP id="cP6xuS" name="BU-P02-MultimodeEQ">
+    <GROUP id="{A6406EF5-C93F-6787-F670-C4BAFC9F55FD}" name="StkLite">
+      <GROUP id="{35A37BAB-13C5-397E-56C9-0D2DC5BA8A8E}" name="include">
+        <FILE id="RL9OKL" name="BiQuad.h" compile="0" resource="0" file="../StkLite/include/BiQuad.h"/>
+        <FILE id="fbFS6T" name="Delay.h" compile="0" resource="0" file="../StkLite/include/Delay.h"/>
+        <FILE id="b2ivQq" name="DelayA.h" compile="0" resource="0" file="../StkLite/include/DelayA.h"/>
+        <FILE id="pQsfrF" name="DelayL.h" compile="0" resource="0" file="../StkLite/include/DelayL.h"/>
+        <FILE id="sD9Yf0" name="Filter.h" compile="0" resource="0" file="../StkLite/include/Filter.h"/>
+        <FILE id="LP4xdv" name="Fir.h" compile="0" resource="0" file="../StkLite/include/Fir.h"/>
+        <FILE id="wkNq3l" name="FormSwep.h" compile="0" resource="0" file="../StkLite/include/FormSwep.h"/>
+        <FILE id="w03IF7" name="Iir.h" compile="0" resource="0" file="../StkLite/include/Iir.h"/>
+        <FILE id="V8Zf3a" name="OnePole.h" compile="0" resource="0" file="../StkLite/include/OnePole.h"/>
+        <FILE id="pjKSeN" name="OneZero.h" compile="0" resource="0" file="../StkLite/include/OneZero.h"/>
+        <FILE id="wOgw5a" name="PoleZero.h" compile="0" resource="0" file="../StkLite/include/PoleZero.h"/>
+        <FILE id="ejvzsc" name="Stk.h" compile="0" resource="0" file="../StkLite/include/Stk.h"/>
+        <FILE id="AFK5O2" name="TapDelay.h" compile="0" resource="0" file="../StkLite/include/TapDelay.h"/>
+        <FILE id="GLeXo6" name="TwoPole.h" compile="0" resource="0" file="../StkLite/include/TwoPole.h"/>
+        <FILE id="BNJHwl" name="TwoZero.h" compile="0" resource="0" file="../StkLite/include/TwoZero.h"/>
+      </GROUP>
+      <GROUP id="{E8339CFE-BE34-63C5-4BDB-DE43012FA18E}" name="src">
+        <FILE id="dUmKJf" name="BiQuad.cpp" compile="1" resource="0" file="../StkLite/src/BiQuad.cpp"/>
+        <FILE id="Z29zv1" name="Delay.cpp" compile="1" resource="0" file="../StkLite/src/Delay.cpp"/>
+        <FILE id="ySTXhw" name="DelayA.cpp" compile="1" resource="0" file="../StkLite/src/DelayA.cpp"/>
+        <FILE id="f3YfxG" name="DelayL.cpp" compile="1" resource="0" file="../StkLite/src/DelayL.cpp"/>
+        <FILE id="A9VCAb" name="Fir.cpp" compile="1" resource="0" file="../StkLite/src/Fir.cpp"/>
+        <FILE id="fhP5q8" name="FormSwep.cpp" compile="1" resource="0" file="../StkLite/src/FormSwep.cpp"/>
+        <FILE id="jQmVj0" name="Iir.cpp" compile="1" resource="0" file="../StkLite/src/Iir.cpp"/>
+        <FILE id="wdKVOB" name="OnePole.cpp" compile="1" resource="0" file="../StkLite/src/OnePole.cpp"/>
+        <FILE id="g7quod" name="OneZero.cpp" compile="1" resource="0" file="../StkLite/src/OneZero.cpp"/>
+        <FILE id="I7YpR3" name="PoleZero.cpp" compile="1" resource="0" file="../StkLite/src/PoleZero.cpp"/>
+        <FILE id="nueO6c" name="Stk.cpp" compile="1" resource="0" file="../StkLite/src/Stk.cpp"/>
+        <FILE id="uLU7b3" name="TapDelay.cpp" compile="1" resource="0" file="../StkLite/src/TapDelay.cpp"/>
+        <FILE id="dhHKz3" name="TwoPole.cpp" compile="1" resource="0" file="../StkLite/src/TwoPole.cpp"/>
+        <FILE id="w2n3K8" name="TwoZero.cpp" compile="1" resource="0" file="../StkLite/src/TwoZero.cpp"/>
+      </GROUP>
+    </GROUP>
     <GROUP id="{85EBBF03-B76C-FF2C-5D08-ACA0BD437BBC}" name="Source">
+      <FILE id="vcXkOO" name="FilterType.h" compile="0" resource="0" file="Source/FilterType.h"/>
+      <FILE id="N8SgQr" name="MultiFilter.cpp" compile="1" resource="0" file="Source/MultiFilter.cpp"/>
+      <FILE id="HPsJmu" name="MultiFilter.h" compile="0" resource="0" file="Source/MultiFilter.h"/>
       <FILE id="EDTkOm" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="ZSITXB" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
