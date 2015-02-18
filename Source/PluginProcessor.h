@@ -110,6 +110,7 @@ private:
     const FilterType DEFAULT_A_F2_TYPE = FilterType::Peak;
     const FilterType DEFAULT_A_F3_TYPE = FilterType::HighShelf;
 
+    const float TOTAL_NUM_FILTERS = (float) (int) FilterType::TotalNumFilters;
     
     // Default Host/Control Values (Must be 0-1.f mapping)
     const float DEFAULT_U_F1_FREQ           = (DEFAULT_A_F1_FREQ - 20) / 19980;

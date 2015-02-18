@@ -41,7 +41,13 @@ void PluginLookAndFeel::drawLinearSlider (Graphics& g,
             g.setColour(slider.findColour(Slider::trackColourId));
             g.fillRect(x, y, (int) sliderPos - x, height/2);
         }
-
+    }
+    else if (style == Slider::LinearHorizontal)
+    {
+        if (slider.isHorizontal()) {
+            g.setColour(slider.findColour(Slider::trackColourId));
+            g.fillRect(x, y + height/4, (int) sliderPos - x, height/2);
+        }
     }
 }
 

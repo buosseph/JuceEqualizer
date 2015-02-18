@@ -47,6 +47,8 @@ String PluginAudioProcessor::filterTypeString(FilterType type) {
         case FilterType::LowShelf:      return String("LowShelf");
         case FilterType::Peak:          return String("Peak");
         case FilterType::HighShelf:     return String("HighShelf");
+        case FilterType::LowPass:       return String("LowPass");
+        case FilterType::HighPass:      return String("HighPass");
         default:                        return String::empty;
     }
 }
@@ -111,7 +113,7 @@ void PluginAudioProcessor::setParameter (int index, float newValue)     // newVa
             break;
         case f1TypeParam:
             uf1Type = newValue;
-            af1Type = (FilterType) (int) (uf1Type * 3.f);
+            af1Type = (FilterType) (int) (uf1Type * TOTAL_NUM_FILTERS);
             filter1->changeFilterType(af1Type);
             break;
 
@@ -135,7 +137,7 @@ void PluginAudioProcessor::setParameter (int index, float newValue)     // newVa
             break;
         case f2TypeParam:
             uf2Type = newValue;
-            af2Type = (FilterType) (int) (uf2Type * 3.f);
+            af2Type = (FilterType) (int) (uf2Type * TOTAL_NUM_FILTERS);
             filter2->changeFilterType(af2Type);
             break;
 
@@ -159,7 +161,7 @@ void PluginAudioProcessor::setParameter (int index, float newValue)     // newVa
             break;
         case f3TypeParam:
             uf3Type = newValue;
-            af3Type = (FilterType) (int) (uf3Type * 3.f);
+            af3Type = (FilterType) (int) (uf3Type * TOTAL_NUM_FILTERS);
             filter3->changeFilterType(af3Type);
             break;
     }
@@ -354,8 +356,8 @@ void PluginAudioProcessor::processBlock (AudioSampleBuffer& buffer, MidiBuffer& 
     float* leftChannel = buffer.getWritePointer(0);
     float* rightChannel = buffer.getWritePointer(1);
     for (int i = 0; i < buffer.getNumSamples(); i++) {
-        leftChannel[i]  = aOutputGain * filter3->tick(filter2->tick(filter1->tick(leftChannel[i])));
-        rightChannel[i] = aOutputGain * filter3->tick(filter2->tick(filter1->tick(rightChannel[i])));
+        leftChannel[i]  = aOutputGain * filter2->tick(leftChannel[i]); //filter3->tick(filter2->tick(filter1->tick(leftChannel[i])));
+        rightChannel[i] = aOutputGain * filter2->tick(rightChannel[i]); //filter3->tick(filter2->tick(filter1->tick(rightChannel[i])));
     }
 }
 

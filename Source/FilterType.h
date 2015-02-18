@@ -14,6 +14,8 @@ enum class FilterType
     LowShelf,
     Peak,
     HighShelf,
+    LowPass,
+    HighPass,
     TotalNumFilters
 };
 

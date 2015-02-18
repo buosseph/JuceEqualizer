@@ -128,7 +128,51 @@ void MultiFilter::updateCoefficients() {
 //            
 //            filter.setCoefficients(b0, b1, b2, a1, a2);
             break;
+        
+        case FilterType::LowPass:
+            w0 = 2.f * M_PI * frequency / fs;
+            alpha = sinf(w0)/(2.f * q);
+            cos_w0 = cosf(w0);
             
+            b0 = (1.f - cos_w0) / 2.f;
+            b1 =  1.f - cos_w0;
+            b2 = b0;
+            
+            a0 =  1.f + alpha;
+            a1 = -2.f * cos_w0;
+            a2 =  1.f - alpha;
+            
+            b0 /= a0;
+            b1 /= a0;
+            b2 /= a0;
+            a1 /= a0;
+            a2 /= a0;
+            
+            filter.setCoefficients(b0, b1, b2, a1, a2);
+            break;
+
+        case FilterType::HighPass:
+            w0 = 2.f * M_PI * frequency / fs;
+            alpha = sinf(w0)/(2.f * q);
+            cos_w0 = cosf(w0);
+            
+            b0 =        (1.f + cos_w0) / 2.f;
+            b1 = -1.f * (1.f + cos_w0);
+            b2 = b0;
+            
+            a0 =  1.f + alpha;
+            a1 = -2.f * cos_w0;
+            a2 =  1.f - alpha;
+            
+            b0 /= a0;
+            b1 /= a0;
+            b2 /= a0;
+            a1 /= a0;
+            a2 /= a0;
+            
+            filter.setCoefficients(b0, b1, b2, a1, a2);
+            break;
+
         default:
             break;
     }
