@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6F508FB9B5DA974637185E12"
-               BuildableName = "BU-P02-MultimodeEQ.component"
+               BuildableName = "JuceEqualizer.component"
                BlueprintName = "BU-P02-MultimodeEQ"
                ReferencedContainer = "container:BU-P02-MultimodeEQ.xcodeproj">
             </BuildableReference>
@@ -39,11 +39,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <PathRunnable
+         runnableDebuggingMode = "0"
+         FilePath = "/Users/brianuosseph/Desktop/Course Work/S15/musi4545/JUCE-OSX/examples/audio plugin host/Builds/MacOSX/build/Debug/Plugin Host.app">
+      </PathRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6F508FB9B5DA974637185E12"
-            BuildableName = "BU-P02-MultimodeEQ.component"
+            BuildableName = "JuceEqualizer.component"
             BlueprintName = "BU-P02-MultimodeEQ"
             ReferencedContainer = "container:BU-P02-MultimodeEQ.xcodeproj">
          </BuildableReference>
@@ -61,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6F508FB9B5DA974637185E12"
-            BuildableName = "BU-P02-MultimodeEQ.component"
+            BuildableName = "JuceEqualizer.component"
             BlueprintName = "BU-P02-MultimodeEQ"
             ReferencedContainer = "container:BU-P02-MultimodeEQ.xcodeproj">
          </BuildableReference>

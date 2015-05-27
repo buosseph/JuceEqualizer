@@ -201,7 +201,7 @@
  #define JucePlugin_Build_VST              1
 #endif
 #ifndef  JucePlugin_Build_VST3
- #define JucePlugin_Build_VST3             0
+ #define JucePlugin_Build_VST3             1
 #endif
 #ifndef  JucePlugin_Build_AU
  #define JucePlugin_Build_AU               0
@@ -213,13 +213,13 @@
  #define JucePlugin_Build_AAX              0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "BU-P02-MultimodeEQ"
+ #define JucePlugin_Name                   "JuceEqualizer"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "BU-P02-MultimodeEQ"
+ #define JucePlugin_Desc                   "An equalizer based on the design of the provided effect in Bitwig Studio."
 #endif
 #ifndef  JucePlugin_Manufacturer
- #define JucePlugin_Manufacturer           "musi45"
+ #define JucePlugin_Manufacturer           "brianuosseph"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
  #define JucePlugin_ManufacturerWebsite    ""
@@ -228,7 +228,7 @@
  #define JucePlugin_ManufacturerEmail      ""
 #endif
 #ifndef  JucePlugin_ManufacturerCode
- #define JucePlugin_ManufacturerCode       'mu45'
+ #define JucePlugin_ManufacturerCode       'bu15'
 #endif
 #ifndef  JucePlugin_PluginCode
  #define JucePlugin_PluginCode             'Plug'
@@ -279,16 +279,16 @@
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_AUExportPrefix
- #define JucePlugin_AUExportPrefix         BUP02MultimodeEQAU
+ #define JucePlugin_AUExportPrefix         JuceEqualizerAU
 #endif
 #ifndef  JucePlugin_AUExportPrefixQuoted
- #define JucePlugin_AUExportPrefixQuoted   "BUP02MultimodeEQAU"
+ #define JucePlugin_AUExportPrefixQuoted   "JuceEqualizerAU"
 #endif
 #ifndef  JucePlugin_AUManufacturerCode
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.brianuosseph.BUP02MultimodeEQ
+ #define JucePlugin_CFBundleIdentifier     com.brianuosseph.JuceEqualizer
 #endif
 #ifndef  JucePlugin_RTASCategory
  #define JucePlugin_RTASCategory           ePlugInCategory_None
@@ -306,7 +306,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.BUP02MultimodeEQ
+ #define JucePlugin_AAXIdentifier          com.brianuosseph.JuceEqualizer
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode

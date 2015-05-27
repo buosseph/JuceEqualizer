@@ -43,8 +43,8 @@ public:
     int getNumParameters() override;
     float getParameter (int index) override;
     void setParameter (int index, float newValue) override;
-    float getParameterDefaultValue (int index) override; // Not included in default Juce template
-    int getParameterNumSteps(int index) override;        // Not included in default Juce template
+    float getParameterDefaultValue (int index) override;
+    int getParameterNumSteps(int index) override;
     
     const String getParameterName (int index) override;
     const String getParameterText (int index) override;
@@ -132,7 +132,9 @@ private:
     float aOutputGain;
     
     // Filters
-    ScopedPointer<MultiFilter> filter1, filter2, filter3;
+    ScopedPointer<MultiFilter>
+        filterL1, filterL2, filterL3,
+        filterR1, filterR2, filterR3;
     
     String filterTypeString(FilterType type);
 };

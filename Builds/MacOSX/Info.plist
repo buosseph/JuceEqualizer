@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.brianuosseph.BUP02MultimodeEQ</string>
+    <string>com.brianuosseph.JuceEqualizer</string>
     <key>CFBundleName</key>
     <string>BU-P02-MultimodeEQ</string>
     <key>CFBundlePackageType</key>
