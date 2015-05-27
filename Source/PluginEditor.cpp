@@ -359,7 +359,7 @@ void PluginAudioProcessorEditor::comboBoxChanged (ComboBox* comboBoxThatHasChang
             PluginAudioProcessor::Parameters::f1TypeParam,
             (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
         );
-        
+
         if (comboBoxThatHasChanged->getSelectedItemIndex() > 2) {
             f1GainDbSlider->setEnabled(false);
         }
@@ -375,7 +375,7 @@ void PluginAudioProcessorEditor::comboBoxChanged (ComboBox* comboBoxThatHasChang
             PluginAudioProcessor::Parameters::f2TypeParam,
             (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
         );
-        
+
         if (comboBoxThatHasChanged->getSelectedItemIndex() > 2) {
             f2GainDbSlider->setEnabled(false);
         }
@@ -391,7 +391,7 @@ void PluginAudioProcessorEditor::comboBoxChanged (ComboBox* comboBoxThatHasChang
             PluginAudioProcessor::Parameters::f3TypeParam,
             (float)comboBoxThatHasChanged->getSelectedItemIndex() / (float) comboBoxThatHasChanged->getNumItems()
         );
-        
+
         if (comboBoxThatHasChanged->getSelectedItemIndex() > 2) {
             f3GainDbSlider->setEnabled(false);
         }
@@ -405,10 +405,9 @@ void PluginAudioProcessorEditor::comboBoxChanged (ComboBox* comboBoxThatHasChang
     //[/UsercomboBoxChanged_Post]
 }
 
-
-
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void PluginAudioProcessorEditor::timerCallback() {
+void PluginAudioProcessorEditor::timerCallback()
+{
     // Set UI values to match any changes made by host automation
     // Timer conflicts cause UI stuttering, this is due to the values not being mapped back
     PluginAudioProcessor& ourProcessor = getProcessor();

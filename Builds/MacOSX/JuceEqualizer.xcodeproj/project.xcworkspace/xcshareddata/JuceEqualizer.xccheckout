@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F09471CC-604F-43C1-8C89-E3117137D599</string>
+	<key>IDESourceControlProjectName</key>
+	<string>JuceEqualizer</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4093BA3D1E63E16BC297422F60653A23C546D3E9</key>
+		<string>https://github.com/brianuosseph/JuceEqualizer.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Builds/MacOSX/JuceEqualizer.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4093BA3D1E63E16BC297422F60653A23C546D3E9</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/brianuosseph/JuceEqualizer.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4093BA3D1E63E16BC297422F60653A23C546D3E9</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4093BA3D1E63E16BC297422F60653A23C546D3E9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BU-P02-MultimodeEQ</string>
+		</dict>
+	</array>
+</dict>
+</plist>
